@@ -25,7 +25,7 @@ keywords:
 
 # Technische Metadaten
 site-url: &site https://nfdi4objects.github.io/oer-template-skript/
-repo-url: &repo https://github.com/nfdi4objects/oer-template-skript
+repo-url: &repo https://github.com/jutol/oer-skript-openrefine
 doi: XXXXXXX.XXXXXXX
 
 # Vorgaben für den Appendix "Zitat"
@@ -34,13 +34,13 @@ csl: assets/csl/internet-archaeology.csl # Verweis auf CSL-Datei mit Zitierforma
 citation:
   type: document
   container-title: "Open Educational Resource"
-  publisher: Institution
+  publisher: Hochschule Mainz
   issued: 2026
   url: *site
   license: "https://creativecommons.org/licenses/by/4.0/"
 
 # Rechtliche Metadaten
-copyright: "Freitext-Angaben zu Inhaber:innen des Urheberrechts an den Inhalten (Anzupassen im Schlüssel `copyright` in der Datei `_oer_metadata.yml`)"
+copyright: "Julia Tolksdorf & Henrike Backhaus"
 license: CC BY # # Optionen für Lizensierungsangaben: https://quarto.org/docs/authoring/front-matter.html#license. Wird übernommen in automatisch erstellten Appendix "Lizenz".
 
 # Spezifische Metadaten für den Export in fachliche Metadatenschemata
