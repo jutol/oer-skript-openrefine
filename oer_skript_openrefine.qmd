@@ -158,24 +158,9 @@ Auf der linken Seite zeigt der Reiter `Facet/Filter` alle aktiven Filter und Fac
 
 ![GUI von OpenRefine](img/GUI.png){fig-alt="Benutzeroberfläche von OpenRefine"}
 
-## Duplikate entfernen
+## Datenbereinigung
 
-Zu Beginn der Datenbereinigung sollte zunächst geprüft werden, ob der Datensatz Duplikate enthält.
-
-::: {.panel-tabset}
-
-#### Arbeitsschritte
-
-`All` → `Edit rows` → `Remove duplicate rows`
-Dort kann eingestellt werden, welche Spalten in die Prüfung auf Duplikate miteinbezogen werden. Zu Beginn werden alle Spalten einbezogen. X werden rausgelöscht.
-
-#### Screenshots
-
-Inhalt Tab B
-
-:::
-
-## Facettierung
+### Facettierung
 
 Zunächst wird ein Überblick über die vorliegenden Daten verschafft. Dies gelingt in OpenRefine über die Funktionalität der **Facettierung**. Mithilfe der Facettierung können alle verschiedenen Werte, die in einer Spalte vorkommen, gruppiert und gesehen werden, wie oft sie auftreten. Eine Facette erstellt eine Art interaktive Zusammenfassung der Daten: Sie listet alle eindeutigen Werte einer Spalte auf und zeigt an, wie oft jeder einzelne davon vorkommt. Dadurch erhält man sehr einfach einen schnellen Überblick über die Daten in einer Spalte.
 
@@ -187,7 +172,7 @@ Beim Import des Datensatzes werden die Spalten standardmäßig als Strings, also
 Um eine andere Art der Facettierung (z. B. eine Numeric Facet) durchzuführen, müssen die Werte zunächst in einen numerischen Datentyp umgewandelt werden.
 :::
 
-### Grabungsareal
+#### Grabungsareal
 
 Die Spalte **Areal** enthält verschachtelte Informationen, die durch Punkte voneinander getrennt sind (z. B. `Hc.III.7.West`). Um diese Information für eine spätere Auswertung nutzbar zu machen, empfiehlt es sich, die Spalte aufzuteilen.
 
@@ -209,7 +194,7 @@ Inhalt Tab B
 
 :::
 
-### Fehlende und fehlerhafte Koordinaten identifizieren
+#### Fehlende und fehlerhafte Koordinaten identifizieren
 
 Um eine räumliche Darstellung der Funde in einem GIS vorzunehmen, muss jeder Fund über Koordinaten verfügen. Um zu prüfen, ob für jeden Fund Koordinaten vorhanden sind, wird die Facettierung auf die Spalten mit den Koordinaten angewendet. Hierfür wird im Spaltenkopf `Facet` → `Customized Facets` → `Facet by blank` ausgewählt. Nun erscheinen links die Werte `false` und `true`. Wenn auf `true` geklickt wird, erhält man alle Funde, die über keine X-Koordinate verfügen und somit für eine räumliche Darstellung in einem GIS unbrauchbar sind – übrig bleiben nur noch 584 von ursprünglich 828 Funden für die räumliche Darstellung.
 
@@ -227,13 +212,29 @@ Inhalt Tab B
 
 :::
 
-## Transformation
+### Duplikate entfernen
 
-### Erstellen einer eindeutigen Identifizierungsnummer
+Zu Beginn der Datenbereinigung sollte zunächst geprüft werden, ob der Datensatz Duplikate enthält.
 
-Bei den Tabellenspalten **Lfd. Nr.** und **Fundstelle** könnte es sich um eindeutige Identifizierungsnummern handeln. Dafür wird eine Facettierung für jede der beiden Spalten durchgeführt und festgestellt, dass beide Spalten Werte aufweisen, die häufiger als einmal vorkommen. Beispiel: Die **Lfd. Nr.** `001` liegt dreifach vor, da sie in den Kampagnenjahren 2002, 2003 und 1987 vergeben wurde. Damit eignen sich beide Spalten nicht als eindeutige Identifizierungsnummern. Es muss also eine neue Spalte aus mehreren vorhandenen Spalten kreiert werden, um zu einer eindeutigen Identifizierungsnummer zu gelangen.
+::: {.panel-tabset}
 
-#### Kampagnenjahr aus dem Datum extrahieren
+#### Arbeitsschritte
+
+`All` → `Edit rows` → `Remove duplicate rows`
+Dort kann eingestellt werden, welche Spalten in die Prüfung auf Duplikate miteinbezogen werden. Zu Beginn werden alle Spalten einbezogen. 
+
+#### Screenshots
+
+Inhalt Tab B
+
+:::
+
+### Transformation
+
+#### Erstellen einer eindeutigen Identifizierungsnummer
+
+Bei den Tabellenspalten **Lfd. Nr.** und **Fundstelle** könnte es sich um eindeutige Identifizierungsnummern handeln. Dafür wird eine Facettierung für jede der beiden Spalten durchgeführt und festgestellt, dass beide Spalten Werte aufweisen, die häufiger als einmal vorkommen. Beispiel: Die **Lfd. Nr.** `001` liegt dreifach vor, da sie in den Kampagnenjahren 2002, 2003 und 1987 vergeben wurde. Damit eignen sich beide Spalten nicht als eindeutige Identifizierungsnummern. Es muss also eine neue Spalte aus mehreren vorhandenen Spalten kreiert werden, um zu einer eindeutigen Identifizierungsnummer zu gelangen: Jeder Fund soll eine ID mit folgendem Schema erhalten: `Fundort (TCH) – Kampagnenjahr – Fundstelle – Lfd. Nr. – Einzelfundnummer bei Sammelfunden`
+
 
 Zunächst wird die Spalte **Datum** facettiert und festgestellt, dass manchmal ein konkreter Tag angegeben ist, manchmal nur eine Jahreszahl. Das Kampagnenjahr soll vom Datum getrennt werden, um zu sehen, wie viele Kampagnen der Datensatz umfasst.
 
@@ -251,7 +252,7 @@ Zunächst wird die Spalte **Datum** facettiert und festgestellt, dass manchmal e
 
 Diese Funktion prüft, ob die Zelle einen Punkt `.` enthält. Ist das der Fall, wird der Inhalt der Zelle am Separator `.` in einzelne Fragmente aufgespalten und das dritte Fragment als Inhalt der neuen Zelle verwendet. Andernfalls wird der ursprüngliche Wert übernommen.
 
-Auf die so entstandene Spalte kann wieder eine Facettierung angewendet werden, und es werden die Werte `02` und `03` sichtbar. Durch Klick auf `Edit` neben diesen Werten können alle Vorkommen gleichzeitig auf das korrekte Kampagnenjahr `2002` bzw. `2003` geändert werden.
+Auf die so entstandene Spalte kann wieder eine Facettierung angewendet werden. Nun wird auf einen Blick sichtbar, dass der Datensatz 10 unterschiedliche Kampagnenjahre umfasst. Duch klicken auf `Edit` neben den Werten `02` und `03` können alle Werte gleichzeitig auf das korrekte Kampagnenjahr `2002` bzw. `2003` geändert werden.
 
 #### Screenshots
 
@@ -259,9 +260,8 @@ Inhalt Tab B
 
 :::
 
-Nun wird auf einen Blick sichtbar, dass der Datensatz 10 unterschiedliche Kampagnenjahre umfasst.
+Nachdem nun eine Spalte mit den extrahierten Jahreszahlen vorliegt kann die ID aus mehreren Spalten konstruiert werden.
 
-#### ID aus mehreren Spalten konstruieren
 
 ::: {.panel-tabset}
 
@@ -277,7 +277,7 @@ Nun wird auf einen Blick sichtbar, dass der Datensatz 10 unterschiedliche Kampag
 
 5.   Abschließend das Fundortkürzel `TCH` über `Edit cells` → `Transform` mit folgender GREL-Expression ergänzen: `"TCH-" + value`
 
-Jeder Fund soll eine ID aus Fundort (TCH) – Kampagnenjahr – Fundstelle – Lfd. Nr. erhalten.
+
 
 #### Screenshots
 
@@ -285,15 +285,14 @@ Inhalt Tab B
 
 :::
 
-#### Sammelfunde aufteilen
 
-In manchen Fundstellen wurden mehrere Funde geborgen. Diese sogenannten Sammelfunde müssen für eine statistische Analyse in Einzelfunde aufgeteilt werden.
+Der Spalte **Beschreibung** ist zu entnehmen, dass in manchen Fundstellen mehrere Funde geborgen wurden. Diese sogenannten Sammelfunde müssen für eine statistische Analyse in Einzelfunde aufgeteilt werden.
 
 ::: {.panel-tabset}
 
 #### Arbeitsschritte
 
-1.   Die Zeilen filtern, in denen die Beschreibung mehrere Fundnummern enthält (mithilfe eines regulären Ausdrucks wie `\d+`).
+1.   Die Datensätze mithilfe der Filterfunktion `Text filter` heraus filtern, in denen die Beschreibung auf mehrere Funde in der selben Fundstelle hinweist (mithilfe eines regulären Ausdrucks wie `\d+`). TODO
 
 2.   Über `Edit column` → `Add column based on this column` eine neue Spalte erzeugen und die enthaltenen Zahlen extrahieren – z. B. mit folgender GREL-Expression: `value.replace(/[^0-9]/, "")`
 
@@ -311,17 +310,14 @@ screenshot einfügen von Trennung der Sammelfunde
 
 :::
 
-#### ID um Sammelfunde erweitern
 
-Jeder Fund soll eine ID aus Fundort (TCH) – Kampagnenjahr – Fundstelle – Lfd. Nr. – (Sammelfunde um 00X erweitert) erhalten.
+Die ID aus `Fundort (TCH) – Kampagnenjahr – Fundstelle – Lfd. Nr.` sollte nun um die Zahl der einzelnen Funde aus einem Sammelfund erweitert werden.
 
-Hierfür wird die Spalte **Zahl** facettiert und die Zahlen von 1–9 ausgewählt und durch `00` erweitert.
-
-Bei Zahlen größer als 10 wird nur eine führende `0` ergänzt.
+Hierfür wird zunächst die Spalte **Zahl** facettiert und die Zahlen von 1–9 ausgewählt und durch `00` erweitert. Bei Zahlen größer als 10 wird nur eine führende `0` ergänzt.
 
 Wie oben beschrieben wird die Spalte **ID** um die Sammelfundnummern erweitert: `Edit cells` → `Transform` unter Einbeziehung der Spalte **Sammelfunde**.
 
-### Clustering
+#### Clustering der Fundbeschreibung
 
 In der Spalte **Beschreibung** liegen Informationen zur Fundkategorie, zur Materialität und zur Anzahl der Funde gemeinsam in einer Zelle vor. Diese müssen für eine anschließende Analyse getrennt werden.
 
